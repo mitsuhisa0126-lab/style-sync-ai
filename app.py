@@ -19,3 +19,21 @@ if st.button("診断スタート！"):
 
 # デバッグ用
 st.write("✅ アプリが正常に起動しています。")
+
+import openai
+import os
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+if st.button("AIコーデ診断スタート！"):
+    if name and style:
+        with st.spinner("AIがあなたに合うコーデを考えています...👕"):
+            prompt = f"{name}さんは{style}スタイルが好きです。この人におすすめのファッションコーデを3つ提案してください。"
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            st.write("👗 **AIの提案:**")
+            st.write(response.choices[0].message["content"])
+    else:
+        st.warning("名前とスタイルを入力してください！")
